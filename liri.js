@@ -6,12 +6,14 @@ var request = require('request');
 var moment = require('moment');
 
 var spotify = new Spotify(keys.spotify);
-var media = process.argv.slice(3).join(" ");
 
+var media = "";
 
-//1. `node liri.js spotify-this-song '<song name here>'`
+//1. `node liri.js spotify-this-song happy`
 if (process.argv[2] == "spotify-this-song") {
+    media = process.argv.slice(3).join(" ");
     spotifyThisSong();
+    appendTxt();
 }
 
 function spotifyThisSong(){
@@ -35,9 +37,11 @@ function spotifyThisSong(){
 }
 
 
-//2. `node liri.js concert-this <artist/band name here>`
+//2. `node liri.js concert-this lil xan`
 if (process.argv[2] == "concert-this") {
+    media = process.argv.slice(3).join(" ");
     concertThis();
+    appendTxt();
 }
 
 function concertThis(){
@@ -56,9 +60,11 @@ function concertThis(){
     })
 }
 
-//3. `node liri.js movie-this '<movie name here>'`
+//3. `node liri.js movie-this star wars`
 if (process.argv[2] == "movie-this") {
+    media = process.argv.slice(3).join(" ");
     movieThis();
+    appendTxt();
 }
 
 function movieThis(){
@@ -91,6 +97,7 @@ function movieThis(){
 }
 
 //4. `node liri.js do-what-it-says`
+if (process.argv[2] == "do-what-it-says") {
 var fs = require("fs");
 fs.readFile("random.txt", "utf8", function(error, data) {
 
@@ -116,5 +123,25 @@ if (dataArr[0]=="spotify-this-song"){
 } else {
     console.log("Please put 'spotify-this-song/concert-this/movie-this' in the first entry!")
 }
+appendTxt();
+
   });
-  
+}
+
+function appendTxt(){
+    var fs = require("fs");
+
+    var text = "||" +process.argv.slice(2).join(", ") + "||\r\n";
+
+    fs.appendFile("log.txt", text, function(err) {
+
+        if (err) {
+          console.log(err);
+        }
+
+        else {
+          console.log("Content Added!");
+        }
+      
+      });
+}
