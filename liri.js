@@ -16,7 +16,7 @@ if (process.argv[2] == "spotify-this-song") {
     appendTxt();
 }
 
-function spotifyThisSong(){
+function spotifyThisSong() {
     console.log(media);
     spotify
         .search({ type: 'track', query: media })
@@ -44,7 +44,7 @@ if (process.argv[2] == "concert-this") {
     appendTxt();
 }
 
-function concertThis(){
+function concertThis() {
     console.log(media)
     var urlquery = "https://rest.bandsintown.com/artists/" + media + "/events?app_id=codingbootcamp";
 
@@ -67,7 +67,7 @@ if (process.argv[2] == "movie-this") {
     appendTxt();
 }
 
-function movieThis(){
+function movieThis() {
     console.log(media)
     var queryUrl = "http://www.omdbapi.com/?t=" + media + "&y=&plot=short&apikey=trilogy";
     request(queryUrl, function (error, response, body) {
@@ -91,57 +91,59 @@ function movieThis(){
             console.log("Language: " + movie.Language);
             console.log("Plot: " + movie.Plot);
             console.log("Actors: " + movie.Actors);
-            console.log(movie.Ratings[1].Source+":"+movie.Ratings[1].Value);
+            console.log(movie.Ratings[1].Source + ":" + movie.Ratings[1].Value);
         }
     });
 }
 
 //4. `node liri.js do-what-it-says`
 if (process.argv[2] == "do-what-it-says") {
-var fs = require("fs");
-fs.readFile("random.txt", "utf8", function(error, data) {
+    var fs = require("fs");
+    fs.readFile("random.txt", "utf8", function (error, data) {
 
-    if (error) {
-      return console.log(error);
-    }
-  
-    var dataArr = data.split(",");
-  
-    console.log(dataArr);
-  
-    media = dataArr[1];
-    
-if (dataArr[0]=="spotify-this-song"){
-    
-    spotifyThisSong();
-} else if (dataArr[0]=="concert-this"){
-  
-    concertThis();
-} else if (dataArr[0]=="movie-this"){
-    
-    movieThis();
-} else {
-    console.log("Please put 'spotify-this-song/concert-this/movie-this' in the first entry!")
+        if (error) {
+            return console.log(error);
+        }
+        
+        data = data.replace(/['"]+/g, '');
+
+        var dataArr = data.split(", ");
+
+        console.log(dataArr);
+
+        media = dataArr[1];
+
+        if (dataArr[0] == "spotify-this-song") {
+
+            spotifyThisSong();
+        } else if (dataArr[0] == "concert-this") {
+
+            concertThis();
+        } else if (dataArr[0] == "movie-this") {
+
+            movieThis();
+        } else {
+            console.log("Please put 'spotify-this-song/concert-this/movie-this' in the first entry!")
+        }
+        appendTxt();
+
+    });
 }
-appendTxt();
 
-  });
-}
-
-function appendTxt(){
+function appendTxt() {
     var fs = require("fs");
 
-    var text = "||" +process.argv.slice(2).join(", ") + "||\r\n";
+    var text = "||" + process.argv.slice(2).join(", ") + "||\r\n";
 
-    fs.appendFile("log.txt", text, function(err) {
+    fs.appendFile("log.txt", text, function (err) {
 
         if (err) {
-          console.log(err);
+            console.log(err);
         }
 
         else {
-          console.log("Content Added!");
+            console.log("Content Added!");
         }
-      
-      });
+
+    });
 }
