@@ -52,11 +52,13 @@ function concertThis() {
         // Print the error if one occurred
         console.log('error:', error);
         console.log("Upcoming concerts for " + media + ":")
+
         var obj = JSON.parse(body);
         for (var set in obj) {
-            var date = moment(obj[set].datetime).format("YYYY/MM/DD");
+            var date = moment(obj[set].datetime).format("MM/DD/YYYY");
             console.log("At " + obj[set].venue.name + " " + obj[set].venue.city + " " + date);
         }
+        
     })
 }
 
